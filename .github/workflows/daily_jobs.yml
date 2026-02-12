@@ -1,0 +1,36 @@
+name: Daily Job Search Agent
+
+on:
+  schedule:
+    - cron: '0 4 * * *' # Har roz subah 9:30 AM IST (4:00 AM UTC) par chalega
+  workflow_dispatch: # Taki aap manual bhi chala sakein
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/set-up-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run Job Agent
+        env:
+          SERP_API_KEY: ${{ secrets.SERP_API_KEY }}
+          JOB_KEYWORDS: "Web Developer"
+          JOB_LOCATION: "India"
+        run: python job_agent.py
+
+      - name: Commit and Push changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add all_jobs_list.csv
+          git commit -m "Auto-update: New jobs added on $(date)" || echo "No changes to commit"
+          git push
