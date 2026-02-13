@@ -4,6 +4,9 @@ on:
   schedule:
     - cron: '0 4 * * *' # Every day at 9:30 AM IST
   workflow_dispatch: # Manual run button
+  push:
+    branches:
+      - main # Taki abhi push karte hi ye chalne lge aur green tick dikhe
 
 jobs:
   build:
@@ -13,12 +16,13 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/set-up-python@v4
+        uses: actions/setup-python@v4
         with:
           python-version: '3.9'
 
       - name: Install dependencies
-        run: pip install requests
+        run: |
+          pip install requests pandas
 
       - name: Run Job Agent
         env:
@@ -26,7 +30,7 @@ jobs:
           EMAIL_USER: ${{ secrets.EMAIL_USER }}
           EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
           RECEIVER_EMAIL: ${{ secrets.RECEIVER_EMAIL }}
-          JOB_KEYWORDS: "Web Developer"
+          JOB_KEYWORDS: "Data Analyst OR Data Scientist"
           JOB_LOCATION: "India"
         run: python job_agent.py
 

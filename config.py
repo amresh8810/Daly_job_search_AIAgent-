@@ -9,7 +9,7 @@ EMAIL_PASS = os.getenv("EMAIL_PASS", "ddjsomyxvbuopsqr")
 RECEIVER_EMAIL = os.getenv("RECEIVER_EMAIL", "amreshkumar08797@gmail.com")
 
 # Job Search Settings
-JOB_KEYWORDS = os.getenv("JOB_KEYWORDS", "Web Developer")
+JOB_KEYWORDS = os.getenv("JOB_KEYWORDS", "Data Analyst OR Data Scientist")
 JOB_LOCATION = os.getenv("JOB_LOCATION", "India")
 
 # Google Sheet Integration
