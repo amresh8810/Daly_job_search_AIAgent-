@@ -56,6 +56,6 @@ def send_job_email(jobs):
         server.login(config.EMAIL_USER, config.EMAIL_PASS)
         server.send_message(msg)
         server.quit()
-        print(f"✅ Email sent successfully to {config.RECEIVER_EMAIL}")
+        print(f"Email sent successfully to {config.RECEIVER_EMAIL}")
     except Exception as e:
-        print(f"❌ Failed to send email: {e}")
+        print(f"Failed to send email: {e}")

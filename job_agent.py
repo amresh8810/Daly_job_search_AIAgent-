@@ -12,7 +12,7 @@ JOB_KEYWORDS = config.JOB_KEYWORDS
 JOB_LOCATION = config.JOB_LOCATION
 
 def search_jobs():
-    print(f"🔍 Searching for '{JOB_KEYWORDS}' in '{JOB_LOCATION}'...")
+    print(f"Searching for '{JOB_KEYWORDS}' in '{JOB_LOCATION}'...")
     params = {
         "engine": "google_jobs",
         "q": JOB_KEYWORDS,
@@ -23,7 +23,7 @@ def search_jobs():
         response = requests.get("https://serpapi.com/search", params=params)
         return response.json().get("jobs_results", [])
     except Exception as e:
-        print(f"❌ Error searching jobs: {e}")
+        print(f"Error searching jobs: {e}")
         return []
 
 def save_jobs(jobs):
@@ -48,9 +48,9 @@ def save_jobs(jobs):
                     "Location": j.get("location"),
                     "Apply Link": j.get("apply_options", [{}])[0].get("link", "No link")
                 })
-        print(f"💾 Saved {len(jobs)} jobs to {filename}")
+        print(f"Saved {len(jobs)} jobs to {filename}")
     except Exception as e:
-        print(f"❌ Error saving to CSV: {e}")
+        print(f"Error saving to CSV: {e}")
 
 if __name__ == "__main__":
     if not SERP_API_KEY or "PASTE" in SERP_API_KEY:
@@ -66,7 +66,7 @@ if __name__ == "__main__":
         save_jobs(top_jobs)
         
         # 3. Send Email
-        print("✉️ Sending email update...")
+        print("Sending email update...")
         send_job_email(top_jobs)
     else:
-        print("📭 No new jobs found today.")
+        print("No new jobs found today.")
