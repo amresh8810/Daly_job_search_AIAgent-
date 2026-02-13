@@ -1,11 +1,11 @@
 import os
 
 # API Keys (Priority: Environment Variables, then Hardcoded)
-SERP_API_KEY = os.getenv("SERP_API_KEY", "6989ff535702dde902b520d4")
+SERP_API_KEY = os.getenv("SERP_API_KEY", "68c5ef20de394832137b30a0e2ca37737f83ae93b861222503bc097e0b9f9dcd")
 
 # Email Configuration
 EMAIL_USER = os.getenv("EMAIL_USER", "amreshkumar08797@gmail.com")
-EMAIL_PASS = os.getenv("EMAIL_PASS", "ddjs omyx vbuo psqr")
+EMAIL_PASS = os.getenv("EMAIL_PASS", "ddjsomyxvbuopsqr")
 RECEIVER_EMAIL = os.getenv("RECEIVER_EMAIL", "amreshkumar08797@gmail.com")
 
 # Job Search Settings
