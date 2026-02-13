@@ -31,7 +31,7 @@ def save_jobs(jobs):
         return
 
     filename = "all_jobs_list.csv"
-    headers = ["Date", "Job Title", "Company", "Location", "Apply Link"]
+    headers = ["Date", "Job Title", "Company", "Location", "Salary", "Apply Link"]
     file_exists = os.path.isfile(filename)
     
     try:
@@ -41,11 +41,15 @@ def save_jobs(jobs):
                 writer.writeheader()
             
             for j in jobs:
+                # Extract salary if available
+                salary = j.get("detected_extensions", {}).get("salary", "Not specified")
+                
                 writer.writerow({
                     "Date": datetime.now().strftime("%Y-%m-%d"),
                     "Job Title": j.get("title"),
                     "Company": j.get("company_name"),
                     "Location": j.get("location"),
+                    "Salary": salary,
                     "Apply Link": j.get("apply_options", [{}])[0].get("link", "No link")
                 })
         print(f"Saved {len(jobs)} jobs to {filename}")
