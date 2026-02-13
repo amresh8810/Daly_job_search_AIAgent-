@@ -2,8 +2,8 @@ name: Daily Job Search Agent
 
 on:
   schedule:
-    - cron: '0 4 * * *' # Har roz subah 9:30 AM IST (4:00 AM UTC) par chalega
-  workflow_dispatch: # Taki aap manual bhi chala sakein
+    - cron: '0 4 * * *' # Every day at 9:30 AM IST
+  workflow_dispatch: # Manual run button
 
 jobs:
   build:
@@ -23,6 +23,9 @@ jobs:
       - name: Run Job Agent
         env:
           SERP_API_KEY: ${{ secrets.SERP_API_KEY }}
+          EMAIL_USER: ${{ secrets.EMAIL_USER }}
+          EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
+          RECEIVER_EMAIL: ${{ secrets.RECEIVER_EMAIL }}
           JOB_KEYWORDS: "Web Developer"
           JOB_LOCATION: "India"
         run: python job_agent.py

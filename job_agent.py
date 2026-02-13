@@ -3,14 +3,16 @@ import json
 import csv
 from datetime import datetime
 import os
+import config
+from email_sender import send_job_email
 
-# GitHub Secrets ya local config se API key lena
-SERP_API_KEY = os.getenv("SERP_API_KEY")
-JOB_KEYWORDS = os.getenv("JOB_KEYWORDS", "Web Developer")
-JOB_LOCATION = os.getenv("JOB_LOCATION", "India")
+# Settings from config.py
+SERP_API_KEY = config.SERP_API_KEY
+JOB_KEYWORDS = config.JOB_KEYWORDS
+JOB_LOCATION = config.JOB_LOCATION
 
 def search_jobs():
-    print(f"Searching for '{JOB_KEYWORDS}' in '{JOB_LOCATION}'...")
+    print(f"🔍 Searching for '{JOB_KEYWORDS}' in '{JOB_LOCATION}'...")
     params = {
         "engine": "google_jobs",
         "q": JOB_KEYWORDS,
@@ -21,12 +23,11 @@ def search_jobs():
         response = requests.get("https://serpapi.com/search", params=params)
         return response.json().get("jobs_results", [])
     except Exception as e:
-        print(f"Error: {e}")
+        print(f"❌ Error searching jobs: {e}")
         return []
 
 def save_jobs(jobs):
     if not jobs:
-        print("No jobs found.")
         return
 
     filename = "all_jobs_list.csv"
@@ -42,18 +43,30 @@ def save_jobs(jobs):
             for j in jobs:
                 writer.writerow({
                     "Date": datetime.now().strftime("%Y-%m-%d"),
-                    "Title": j.get("title"),
+                    "Job Title": j.get("title"),
                     "Company": j.get("company_name"),
                     "Location": j.get("location"),
                     "Apply Link": j.get("apply_options", [{}])[0].get("link", "No link")
                 })
-        print(f"Successfully saved {len(jobs)} jobs to {filename}")
+        print(f"💾 Saved {len(jobs)} jobs to {filename}")
     except Exception as e:
-        print(f"Error saving: {e}")
+        print(f"❌ Error saving to CSV: {e}")
 
 if __name__ == "__main__":
-    if not SERP_API_KEY:
-        print("Error: SERP_API_KEY not found! Set it in GitHub Secrets.")
+    if not SERP_API_KEY or "PASTE" in SERP_API_KEY:
+        print("⚠️ Warning: SERP_API_KEY not found. Search might fail.")
+    
+    # 1. Search for jobs
+    results = search_jobs()
+    
+    if results:
+        top_jobs = results[:10] # Top 10 jobs pick karein
+        
+        # 2. Save to CSV
+        save_jobs(top_jobs)
+        
+        # 3. Send Email
+        print("✉️ Sending email update...")
+        send_job_email(top_jobs)
     else:
-        results = search_jobs()
-        save_jobs(results[:10])
+        print("📭 No new jobs found today.")
