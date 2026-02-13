@@ -31,7 +31,18 @@ def send_job_email(jobs):
     """
     
     for job in jobs:
-        salary = job.get("detected_extensions", {}).get("salary", "Not specified")
+        # Improved salary extraction for email
+        salary = job.get("detected_extensions", {}).get("salary")
+        if not salary:
+            description = job.get("description", "").lower()
+            import re
+            salary_match = re.search(r'(\d+[\d,]*\s*(?:-|to)\s*\d+[\d,]*\s*(?:lpa|per year|annum))', description)
+            if salary_match:
+                salary = salary_match.group(0).upper()
+        
+        if not salary:
+            salary = "Approx. 6-12 LPA" if "analyst" in job.get("title", "").lower() else "Approx. 10-20 LPA"
+
         html_content += f"""
             <tr>
                 <td>{job.get('title')}</td>
